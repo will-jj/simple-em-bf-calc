@@ -95,6 +95,7 @@ void FillFactoryBrainParty(void)
         species[i] = gFacilityTrainerMons[monId].species;
         heldItems[i] = gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId];
         monIDs[i] = monId;
+        printf("Mon %d: %s\n", i, gFacilityTrainerMons[monId].name);
         i++;
     }
 }
@@ -102,5 +103,8 @@ void FillFactoryBrainParty(void)
 void main(void)
 {
     FillFactoryBrainParty();
+    FillFactoryBrainParty();
+    FillFactoryBrainParty();
+
     return;
 }
