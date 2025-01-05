@@ -16,7 +16,7 @@
 u32 gRngValue = 0;
 struct FacilityMon *gFacilityTrainerMons = gBattleFrontierMons;
 u16 gFrontierTempParty[MAX_FRONTIER_PARTY_SIZE] = {0};
-u32 teamPlayas[NUM_FRONTIER_MONS][FRONTIER_PARTY_SIZE] = {0};
+unsigned long teamPlayas[NUM_FRONTIER_MONS][FRONTIER_PARTY_SIZE] = {0};
 
 u16 Random(void)
 {
@@ -118,7 +118,7 @@ void WriteTeamsToCSV(void)
 
     for (int m = 0; m < NUM_FRONTIER_MONS; m++)
     {
-        fprintf(fp, "%s, %d, %d, %d\n",
+        fprintf(fp, "%s, %lu, %lu, %lu\n",
                 gBattleFrontierMons[m].name, teamPlayas[m][0], teamPlayas[m][1], teamPlayas[m][0]);
     }
 
@@ -128,11 +128,11 @@ void WriteTeamsToCSV(void)
 void main(void)
 {
 
-    for (u32 ii = 0; ii < UINT32_MAX; ii++)
+    for (unsigned long ii = 0; ii < UINT32_MAX; ii++)
     {
         if (ii % 1000000 == 0)
         {
-            printf("Team %lu\n", (unsigned long) ii);
+            printf("Team %lu\n", ii);
         }
         FillFactoryBrainParty();
     }
