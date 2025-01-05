@@ -13,15 +13,14 @@
 #define FRONTIER_LVL_OPEN 1
 #define MAX_MON_MOVES 4
 
-
 u32 gRngValue = 0;
 struct FacilityMon *gFacilityTrainerMons = gBattleFrontierMons;
 u16 gFrontierTempParty[MAX_FRONTIER_PARTY_SIZE] = {0};
-
+u32 teamPlayas[NUM_FRONTIER_MONS][FRONTIER_PARTY_SIZE] = {0};
 
 u16 Random(void)
 {
-    //ISO_RANDOMIZE1
+    // ISO_RANDOMIZE1
     gRngValue = (1103515245 * (gRngValue) + 24691);
     return gRngValue >> 16;
 }
@@ -74,37 +73,71 @@ void FillFactoryBrainParty(void)
         if (monLevel == FRONTIER_MAX_LEVEL_50 && monId > FRONTIER_MONS_HIGH_TIER)
             continue;
 
-        // Skip rental mon check
-
-        for (k = 0; k < i; k++)
-        {
-            if (species[k] == gFacilityTrainerMons[monId].species)
-                break;
-        }
-        if (k != i)
-            continue;
-
-        for (k = 0; k < i; k++)
-        {
-            if (heldItems[k] != ITEM_NONE && heldItems[k] == gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId])
-                break;
-        }
-        if (k != i)
-            continue;
-
         species[i] = gFacilityTrainerMons[monId].species;
         heldItems[i] = gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId];
-        monIDs[i] = monId;
-        printf("Mon %d: %s\n", i, gFacilityTrainerMons[monId].name);
+
+        // Skip rental mon check (i.e, removed chunk of code)
+
+        // only check second and third mon
+        if (i != 0)
+        {
+            for (k = 0; k < i; k++)
+            {
+                if (species[k] == species[i])
+                    break;
+            }
+            if (k != i)
+                continue;
+
+            for (k = 0; k < i; k++)
+            {
+                if (heldItems[k] != ITEM_NONE && heldItems[k] == heldItems[i])
+                    break;
+            }
+            if (k != i)
+                continue;
+        }
+
+
+        // increment the mon id in slot count
+        teamPlayas[monId][i]++;
         i++;
     }
 }
 
+void WriteTeamsToCSV(void)
+{
+    FILE *fp = fopen("teamPlayasMax.csv", "w");
+    if (fp == NULL)
+    {
+        perror("Error opening file");
+        return;
+    }
+
+    fprintf(fp, "Mon, Slot-1, Slot-2, Slot-3\n");
+
+    for (int m = 0; m < NUM_FRONTIER_MONS; m++)
+    {
+        fprintf(fp, "%s, %d, %d, %d\n",
+                gBattleFrontierMons[m].name, teamPlayas[m][0], teamPlayas[m][1], teamPlayas[m][0]);
+    }
+
+    fclose(fp);
+}
+
 void main(void)
 {
-    FillFactoryBrainParty();
-    FillFactoryBrainParty();
-    FillFactoryBrainParty();
+
+    for (u32 ii = 0; ii < UINT32_MAX; ii++)
+    {
+        if (ii % 1000000 == 0)
+        {
+            printf("Team %lu\n", (unsigned long) ii);
+        }
+        FillFactoryBrainParty();
+    }
+
+    WriteTeamsToCSV();
 
     return;
 }
