@@ -119,7 +119,7 @@ void WriteTeamsToCSV(void)
     for (int m = 0; m < NUM_FRONTIER_MONS; m++)
     {
         fprintf(fp, "%s, %lu, %lu, %lu\n",
-                gBattleFrontierMons[m].name, teamPlayas[m][0], teamPlayas[m][1], teamPlayas[m][0]);
+                gBattleFrontierMons[m].name, teamPlayas[m][0], teamPlayas[m][1], teamPlayas[m][2]);
     }
 
     fclose(fp);
