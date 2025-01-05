@@ -128,7 +128,7 @@ void WriteTeamsToCSV(void)
 void main(void)
 {
 
-    for (unsigned long ii = 0; ii < UINT32_MAX; ii++)
+    for (unsigned long ii = 0; ii <= UINT32_MAX; ii++)
     {
         if (ii % 1000000 == 0)
         {
